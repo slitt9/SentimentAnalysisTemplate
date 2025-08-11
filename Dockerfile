@@ -17,13 +17,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy source code
 COPY . .
 
-# Create artifacts directory
+# Create artifacts directory and copy files
 RUN mkdir -p artifacts
-
-# Copy your trained model artifacts
 COPY artifacts/best_model.ckpt artifacts/
 COPY artifacts/vocab.json artifacts/
 COPY artifacts/embeddings.pt artifacts/
+
+# Verify files are copied
+RUN ls -la artifacts/
 
 # Expose port
 EXPOSE 8000
