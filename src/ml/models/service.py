@@ -20,22 +20,22 @@ class ModelService:
     @classmethod
     def initialize_from_artifacts(cls, config: AppConfig) -> "ModelService":
         """Initialize the service from saved artifacts."""
-        print(f"Loading vocabulary from {config.vocab_file}")
-        with open(config.vocab_file, 'r') as f:
+        print(f"Loading vocabulary from {config.vocab_file_path}")
+        with open(config.vocab_file_path, 'r') as f:
             vocab_data = json.load(f)
         
         vocab = SimpleVocab(vocab_data['stoi'], vocab_data['itos'])
         print(f"Vocabulary loaded with {len(vocab)} words")
         
-        print(f"Loading embeddings from {config.embeddings_file}")
+        print(f"Loading embeddings from {config.embeddings_file_path}")
         # Fix: Add weights_only=False for PyTorch 2.6+ compatibility
-        embeddings = torch.load(config.embeddings_file, map_location='cpu', weights_only=False)
+        embeddings = torch.load(config.embeddings_file_path, map_location='cpu', weights_only=False)
         print(f"Embeddings loaded with shape {embeddings.shape}")
         
-        print(f"Loading model from {config.model_ckpt}")
+        print(f"Loading model from {config.model_ckpt_path}")
         model = LSTMClassifier(embeddings=embeddings)
         # Fix: Add weights_only=False for PyTorch 2.6+ compatibility
-        model.load_state_dict(torch.load(config.model_ckpt, map_location='cpu', weights_only=False))
+        model.load_state_dict(torch.load(config.model_ckpt_path, map_location='cpu', weights_only=False))
         model.eval()
         print("Model loaded successfully")
         
