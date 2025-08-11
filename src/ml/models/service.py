@@ -25,7 +25,7 @@ class ModelService:
             vocab_data = json.load(f)
         
         vocab = SimpleVocab(vocab_data['stoi'], vocab_data['itos'])
-        print(f"Vocabulary loaded with {len(vocab)} words")
+        print(f"Vocabulary loaded with {len(vocab_data['stoi'])} words")  # Fix: use vocab_data instead of vocab
         
         print(f"Loading embeddings from {config.embeddings_file_path}")
         # Fix: Add weights_only=False for PyTorch 2.6+ compatibility
