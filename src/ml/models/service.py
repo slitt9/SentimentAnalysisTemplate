@@ -19,36 +19,27 @@ class ModelService:
 
     @classmethod
     def initialize_from_artifacts(cls, config: AppConfig) -> "ModelService":
-        """Initialize the model service from saved artifacts."""
-        try:
-            # Load vocabulary FIRST
-            vocab_path = os.path.join(config.artifacts_dir, config.vocab_file)
-            with open(vocab_path, 'r', encoding='utf-8') as f:
-                vocab_data = json.load(f)
-            vocab = SimpleVocab.from_dict(vocab_data)
-            
-            # Load embeddings
-            embeddings_path = os.path.join(config.artifacts_dir, config.embeddings_file)
-            embeddings = torch.load(embeddings_path, map_location='cpu')
-            
-            # Create model with EXACT same vocabulary size
-            model = LSTMClassifier(
-                embeddings=embeddings,
-                lstm_hidden_size=512,
-                lstm_num_layers=3,
-                mlp_hidden_sizes=[512, 256, 128],
-                dropout=0.3,
-            )
-            
-            # Load the trained weights
-            model_path = os.path.join(config.artifacts_dir, config.model_ckpt)
-            state = torch.load(model_path, map_location='cpu')
-            model.load_state_dict(state)
-            
-            return cls(model, vocab)
-            
-        except Exception as e:
-            raise
+        """Initialize the service from saved artifacts."""
+        print(f"Loading vocabulary from {config.vocab_file}")
+        with open(config.vocab_file, 'r') as f:
+            vocab_data = json.load(f)
+        
+        vocab = SimpleVocab(vocab_data['stoi'], vocab_data['itos'])
+        print(f"Vocabulary loaded with {len(vocab)} words")
+        
+        print(f"Loading embeddings from {config.embeddings_file}")
+        # Fix: Add weights_only=False for PyTorch 2.6+ compatibility
+        embeddings = torch.load(config.embeddings_file, map_location='cpu', weights_only=False)
+        print(f"Embeddings loaded with shape {embeddings.shape}")
+        
+        print(f"Loading model from {config.model_ckpt}")
+        model = LSTMClassifier(embeddings=embeddings)
+        # Fix: Add weights_only=False for PyTorch 2.6+ compatibility
+        model.load_state_dict(torch.load(config.model_ckpt, map_location='cpu', weights_only=False))
+        model.eval()
+        print("Model loaded successfully")
+        
+        return cls(model, vocab)
 
     @torch.no_grad()
     def predict_proba(self, text: str) -> float:
