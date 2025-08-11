@@ -1,6 +1,6 @@
 import os
 from dataclasses import dataclass
-from typing import Optional
+from pathlib import Path
 
 
 def getenv_bool(name: str, default: bool) -> bool:
@@ -12,30 +12,24 @@ def getenv_bool(name: str, default: bool) -> bool:
 
 @dataclass
 class AppConfig:
-    artifacts_dir: str
-    model_ckpt: str
-    vocab_file: str
-    embeddings_file: str
+    artifacts_dir: str = "artifacts"
+    model_ckpt: str = "best_model.ckpt"
+    vocab_file: str = "vocab.json"
+    embeddings_file: str = "embeddings.pt"
     use_cuda: bool = False
-    
-    @classmethod
-    def from_env(cls) -> "AppConfig":
-        return cls(
-            artifacts_dir=os.getenv("ARTIFACTS_DIR", "./artifacts"),
-            model_ckpt=os.getenv("MODEL_CKPT", "best_model.ckpt"),
-            vocab_file=os.getenv("VOCAB_FILE", "vocab.json"),
-            embeddings_file=os.getenv("EMBEDDINGS_FILE", "embeddings.pt"),
-            use_cuda=os.getenv("USE_CUDA", "false").lower() == "true"
-        )
 
     @property
     def model_ckpt_path(self) -> str:
         return os.path.join(self.artifacts_dir, self.model_ckpt)
 
     @property
-    def vocab_path(self) -> str:
+    def vocab_file_path(self) -> str:
         return os.path.join(self.artifacts_dir, self.vocab_file)
 
     @property
-    def embeddings_path(self) -> str:
-        return os.path.join(self.artifacts_dir, self.embeddings_file) 
+    def embeddings_file_path(self) -> str:
+        return os.path.join(self.artifacts_dir, self.embeddings_file)
+
+    @classmethod
+    def from_env(cls) -> "AppConfig":
+        return cls() 

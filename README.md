@@ -13,7 +13,7 @@
 
 
 
-##  Model Performance
+## Model Performance
 
 - **Dataset**: Sentiment140 (1.6M tweets)
 - **Architecture**: LSTM + MLP classifier
@@ -21,7 +21,7 @@
 - **Training**: 2 epochs with early stopping
 - **Model Size**: ~32MB
 
-## 🔧 Local Development
+## Local Development
 
 ```bash
 # Clone and setup
@@ -35,7 +35,7 @@ pip install -r requirements.txt
 uvicorn src.api.main:app --reload
 ```
 
-## �� API Endpoints
+## API Endpoints
 
 - `GET /` - API info and endpoints
 - `GET /health` - Health check
@@ -59,7 +59,7 @@ Response:
 }
 ```
 
-## 🏗️ Architecture
+## Architecture
 
 - **Frontend**: FastAPI REST API
 - **Model**: PyTorch LSTM classifier
