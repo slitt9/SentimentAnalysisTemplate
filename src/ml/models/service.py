@@ -28,10 +28,13 @@ class ModelService:
         print(f"Vocabulary loaded with {len(vocab_data['stoi'])} words")
         
         print(f"Loading model from {config.model_ckpt_path}")
-        # Create model without embeddings - let it initialize randomly
+        # Create random embeddings since the file is corrupted
         vocab_size = len(vocab_data['stoi'])
         embedding_dim = 100
-        model = LSTMClassifier(vocab_size=vocab_size, embedding_dim=embedding_dim)
+        random_embeddings = torch.randn(vocab_size, embedding_dim) * 0.01
+        
+        # Create model with random embeddings
+        model = LSTMClassifier(embeddings=random_embeddings)
         model.load_state_dict(torch.load(config.model_ckpt_path, map_location='cpu', weights_only=False))
         model.eval()
         print("Model loaded successfully")
