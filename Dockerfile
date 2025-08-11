@@ -26,9 +26,5 @@ COPY artifacts/embeddings.pt artifacts/
 # Expose port
 EXPOSE 8000
 
-# Health check - more lenient timing
-HEALTHCHECK --interval=60s --timeout=60s --start-period=120s --retries=5 \
-    CMD curl -f http://localhost:8000/health || exit 1
-
-# Start the API
+# Start the API - Railway handles health checks
 CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
