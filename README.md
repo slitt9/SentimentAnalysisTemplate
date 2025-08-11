@@ -3,8 +3,7 @@
 **Railway Hackathon Submission** - Production-ready sentiment analysis API with 73%+ accuracy.
 
 
-
-## �� Features
+## Features
 
 - **High Accuracy**: 73.93% validation accuracy on Sentiment140 dataset
 - **Fast Inference**: <100ms response time
@@ -14,7 +13,7 @@
 
 
 
-## 📊 Model Performance
+##  Model Performance
 
 - **Dataset**: Sentiment140 (1.6M tweets)
 - **Architecture**: LSTM + MLP classifier
