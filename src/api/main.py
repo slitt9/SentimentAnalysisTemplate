@@ -27,13 +27,19 @@ class PredictResponse(BaseModel):
 service = None
 
 @app.on_event("startup")
-def startup_event() -> None:
-    global service
+async def startup_event():
+    print("Starting up... Loading model...")
     try:
-        config = AppConfig.from_env()
-        service = ModelService.initialize_from_artifacts(config)
-    except Exception as exc:
-        raise RuntimeError(f"Model initialization failed: {exc}")
+        # Add timeout for model loading
+        import asyncio
+        await asyncio.wait_for(
+            asyncio.to_thread(ModelService.initialize_from_artifacts),
+            timeout=300.0  # 5 minutes timeout
+        )
+        print("Model loaded successfully!")
+    except Exception as e:
+        print(f"Failed to load model: {e}")
+        raise
 
 @app.get("/health")
 def health() -> dict:
