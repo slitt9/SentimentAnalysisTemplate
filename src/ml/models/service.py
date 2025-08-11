@@ -25,16 +25,13 @@ class ModelService:
             vocab_data = json.load(f)
         
         vocab = SimpleVocab(vocab_data['stoi'], vocab_data['itos'])
-        print(f"Vocabulary loaded with {len(vocab_data['stoi'])} words")  # Fix: use vocab_data instead of vocab
-        
-        print(f"Loading embeddings from {config.embeddings_file_path}")
-        # Fix: Add weights_only=False for PyTorch 2.6+ compatibility
-        embeddings = torch.load(config.embeddings_file_path, map_location='cpu', weights_only=False)
-        print(f"Embeddings loaded with shape {embeddings.shape}")
+        print(f"Vocabulary loaded with {len(vocab_data['stoi'])} words")
         
         print(f"Loading model from {config.model_ckpt_path}")
-        model = LSTMClassifier(embeddings=embeddings)
-        # Fix: Add weights_only=False for PyTorch 2.6+ compatibility
+        # Create model without embeddings - let it initialize randomly
+        vocab_size = len(vocab_data['stoi'])
+        embedding_dim = 100
+        model = LSTMClassifier(vocab_size=vocab_size, embedding_dim=embedding_dim)
         model.load_state_dict(torch.load(config.model_ckpt_path, map_location='cpu', weights_only=False))
         model.eval()
         print("Model loaded successfully")
