@@ -1,0 +1,12 @@
+[build]
+builder = "DOCKERFILE"
+
+[variables]
+ARTIFACTS_DIR = "./artifacts"
+MODEL_CKPT = "model.ckpt"
+VOCAB_FILE = "vocab.json"
+EMBEDDINGS_FILE = "embeddings.pt"
+USE_CUDA = "false"
+
+[deploy]
+restartPolicyType = "ON_FAILURE" 

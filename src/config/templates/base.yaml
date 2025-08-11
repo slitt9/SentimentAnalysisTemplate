@@ -1,0 +1,17 @@
+artifacts_dir: artifacts
+model_ckpt: model.ckpt
+vocab_file: vocab.json
+embeddings_file: embeddings.pt
+use_cuda: false
+
+model:
+  embedding_dim: 100
+  lstm_hidden_size: 128
+  lstm_num_layers: 1
+  mlp_hidden_sizes: [128]
+  dropout: 0.2
+
+train:
+  batch_size: 64
+  num_epochs: 3
+  lr: 0.001 
