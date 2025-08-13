@@ -72,7 +72,7 @@ def predict(request: PredictRequest) -> PredictResponse:
 def root():
     return {
         "message": "Sentiment Analysis API",
-        "accuracy": "77.11%",
+        "accuracy": "73.93%",
         "endpoints": {
             "health": "/health",
             "version": "/version", 
